@@ -112,7 +112,7 @@ public class Arbol_AVL <T extends Integer>{
         }
     }
   
-  //Revisar el factor de equilibrio en toda la ruta hacia la ra�z realizando los balanceos adecuados
+  //Revisar el factor de equilibrio en toda la ruta hacia la raiz realizando los balanceos adecuados
     private void balancea(NodoA r){
         while(r != null){
             if(fe(r) == -2){
