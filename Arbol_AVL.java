@@ -171,24 +171,84 @@ public class Arbol_AVL <T extends Integer>{
         }
     }
     
-    public void eliminar(T val){
+    public NodoA eliminar(T val){
         NodoA borrado = buscar(val);
         if(borrado.der == null && borrado.izq == null){
             if(borrado.getDato() > borrado.padre.getDato()){
                 borrado.padre.der = null;
+                NodoA r = borrado.padre;
                 borrado.padre = null;
+                while(r.padre != null){
+                    balancea(r);
+                    r = r.padre;
+                }
             } 
             else if(borrado.getDato() < borrado.padre.getDato()){
                 borrado.padre.izq = null;
+                NodoA r = borrado.padre;
                 borrado.padre = null;
+                while(r.padre != null){
+                    balancea(r);
+                    r = r.padre;
+                }
             }
         }
-        if(borrado.der != null || borrado.izq != null){
-            
+        if(borrado.der != null && borrado.izq == null){
+            borrado.padre.der = null;
+            NodoA auxiliar = borrado.padre;
+            borrado.padre = null;
+            borrado.der.padre = null;
+            NodoA auxiliar2 = borrado.der;
+            borrado.der = null;
+            auxiliar.der = auxiliar2;
+            auxiliar2.padre = auxiliar;
+            NodoA r = auxiliar2;
+            while(r.der != null){
+                r = r.der;
+            }
+            while(r.padre != null){
+                balancea(r);
+                r = r.padre;
+            }
+        }
+        if(borrado.izq != null && borrado.der == null){
+            borrado.padre.izq = null;
+            NodoA auxiliar = borrado.padre;
+            borrado.padre = null;
+            borrado.izq.padre = null;
+            NodoA auxiliar2 = borrado.izq;
+            borrado.izq = null;
+            auxiliar.izq = auxiliar2;
+            auxiliar2.padre = auxiliar;
+            NodoA r = auxiliar2;
+            while(r.izq != null){
+                r = r.izq;
+            }
+            while(r.padre != null){
+                balancea(r);
+                r = r.padre;
+            }
         }
         if(borrado.getDato() == raiz.getDato()){
-            
+            NodoA r = raiz.izq;
+            while(r.der != null){
+                r = r.der;
+            }
+            NodoA nuevo = eliminar(r.getDato());
+            raiz.der.padre = null;
+            NodoA auxiliar = raiz.der;
+            raiz.der = null;
+            raiz.izq.padre = null;
+            NodoA auxiliar2 = raiz.izq;
+            raiz.izq = null;
+            borrado = raiz;
+            raiz = nuevo;
+            nuevo.der = auxiliar;
+            nuevo.der.padre = nuevo;
+            nuevo.izq = auxiliar2;
+            nuevo.izq.padre = nuevo;
         }
+        return borrado;
     }
     
     public NodoA buscar(T val){
